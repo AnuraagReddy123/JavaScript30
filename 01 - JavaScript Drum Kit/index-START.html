@@ -59,7 +59,27 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  function playSound(e) {
+      // const audio = document.querySelector('audio[data-key="' + e.keyCode.toString() + '"]') Bad way to write
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`)
+      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`) // Class selector is used for .key
+      if (!audio) return
+    
+      audio.currentTime = 0
+      audio.play()
+      key.classList.add('playing')
+      // key.classList.remove('playing')
+      
+    }
 
+    function removeTransition(e) {
+      if (e.propertyName !== 'transform') return // Skip if not transform
+      this.classList.remove('playing') // this is used to see who called the function 
+    }
+    
+    const keys = document.querySelectorAll('.key')
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+    window.addEventListener('keydown', playSound)
 </script>
 
 
