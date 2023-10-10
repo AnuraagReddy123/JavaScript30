@@ -63,13 +63,59 @@
       background: black;
       position: absolute;
       top: 50%;
+      /* Moving origin to rotate it about origin  */
+      transform-origin: 100%; 
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
     }
 
+    /* .min-hand {
+      width: 50%
+    } */
+
   </style>
-
   <script>
+    const secondHand = document.querySelector('.second-hand')
+    const minuteHand = document.querySelector('.min-hand')
+    const hourHand = document.querySelector('.hour-hand')
+    console.log(typeof(secondHand))
 
+    function setHandTime (hand, time, timeunit) {
+      /**
+       * @param {object} hand The hand of the clock (hour, min, second)
+       * @param {int} time The current number of hours, minutes or seconds
+       * @param {int} timeunit The total number of hours, min, seconds in one rotation of the clock (12, 60, 60)
+       */  
 
+      const timeDegrees = ((time / timeunit) * 360) + 90
+      if (time === 0) {
+        hand.style.setProperty('transition', 'none')
+        hand.style.setProperty('transition-timing-function', null)
+      }
+      else {
+        hand.style.setProperty('transition', 'all 0.05s')
+        hand.style.setProperty('transition-timing-function', 'cubic-bezier(0.1, 2.7, 0.58, 1)')
+      }
+      
+      hand.style.transform = `rotate(${timeDegrees}deg)`
+    }
+
+    function setDate() {
+      const now = new Date()
+
+      const seconds = now.getSeconds()
+      setHandTime(secondHand, seconds, 60)
+      // const timeDegrees = ((seconds / 60) * 360) + 90
+      // secondHand.style.transform = `rotate(${timeDegrees}deg)`
+      
+      const minutes = now.getMinutes()
+      setHandTime(minuteHand, minutes, 60)
+      
+      const hours = now.getHours()
+      setHandTime(hourHand, hours, 12)
+    }
+    setInterval(setDate, 1000)
   </script>
 </body>
 </html>
